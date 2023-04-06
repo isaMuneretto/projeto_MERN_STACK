@@ -4,63 +4,73 @@
 
 const userService = require("../services/user.sevice");
 
+//usado try/catch como boa pratica para dar uma resposta para o cliente caso nao execute com sucesso
+
 const create = async (req, res) => {     //controller controla requisição e resposta
-    const { name, username, email, password, avatar, background } = req.body;  //recebe o corpo da requisição e desmembra o objeto e faz com que cada item se transforme em uma variavel para validar elas individualmente
+    try {
+        const { name, username, email, password, avatar, background } = req.body;  //recebe o corpo da requisição e desmembra o objeto e faz com que cada item se transforme em uma variavel para validar elas individualmente
 
-    if (!name || !username || !email || !password || !avatar || !background) {  //o if serve para que seja testado antes de fazer processar o servidor a toa
-        res.status(400).send({ message: "Submit all fields for registration" })
+        if (!name || !username || !email || !password || !avatar || !background) {  //o if serve para que seja testado antes de fazer processar o servidor a toa
+            res.status(400).send({ message: "Submit all fields for registration" })
+        }
+
+        //antes de responder (res.status) para o meu usuario eu posso cadastrar e enviar
+        const user = await userService.createService(req.body); //await é para esperar executar userService.create(req.body) para continuar
+
+        //verifica o user de cima
+        if (!user) {
+            return res.status(400).send({ message: "Error creating User" });
+        }
+
+        //recebe arquivos json. Resposta para o usuário
+        res.status(201).send({
+            message: "User created successfully",
+            user: {
+                id: user._id,
+                name,
+                username,
+                email,
+                avatar,
+                background,
+            },
+        });
+    } catch (err) {
+        res.status(500).send({ message: err.message })
     }
-
-    //antes de responder (res.status) para o meu usuario eu posso cadastrar e enviar
-    const user = await userService.createService(req.body); //await é para esperar executar userService.create(req.body) para continuar
-
-    //verifica o user de cima
-    if (!user) {
-        return res.status(400).send({ message: "Error creating User" });
-    }
-
-    //recebe arquivos json. Resposta para o usuário
-    res.status(201).send({
-        message: "User created successfully",
-        user: {
-            id: user._id,
-            name,
-            username,
-            email,
-            avatar,
-            background,
-        },
-    });
 };
 
 const findAll = async (req, res) => {  //é assincrono porque vai consultar no banco de dados que é um código que vai executar fora do nosso código
-    const users = await userService.findAllService();  //não passa nenhum parâmetro porque já vai retornar os dados que vai ser buscado. Esse findAll não é o mesmo de cima que é do controller                                       //para buscar os usuarios precisa armazenar em uma variavel
+    try {
+        const users = await userService.findAllService();  //não passa nenhum parâmetro porque já vai retornar os dados que vai ser buscado. Esse findAll não é o mesmo de cima que é do controller                                       //para buscar os usuarios precisa armazenar em uma variavel
 
-    if (users.length === 0) {  //verifica se está recebendo todos os usuarios
-        return res.status(400).send({ message: "There are no registered users" })
+        if (users.length === 0) {  //verifica se está recebendo todos os usuarios
+            return res.status(400).send({ message: "There are no registered users" })
+        }
+
+        res.send(users)//manda resposta para o cliente
+    } catch (err) {
+        res.status(500).send({ message: err.message })
     }
-
-    res.send(users) //manda resposta para o cliente
 };
 
-const findById = async (req, res) => {   
+const findById = async (req, res) => {
     /*if(!mongoose.Types.ObjectId.isValid(id)){    se o id não for valido
         return res.status(400).send({message: "Invalid ID"});
     } 
-    const user = await userService.findByIdService(id)  //busca efetivamente o usuario. Acessa o bd pelo service. substituido pela funcao de baixo */                    
-    
-    const user = req.user; 
+    const user = await userService.findByIdService(id)  //busca efetivamente o usuario. Acessa o bd pelo service. substituido pela funcao de baixo */
+
+    const user = req.user;
     res.send(user);
 };
 
 const update = async (req, res) => {
     const { name, username, email, password, avatar, background } = req.body;  //recebe o corpo da requisição e desmembra o objeto e faz com que cada item se transforme em uma variavel para validar elas individualmente
 
-     if (!name && !username && !email && !password && !avatar && !background) {  //o if serve para que seja testado antes de fazer processar o servidor a toa
+    if (!name && !username && !email && !password && !avatar && !background) {  //o if serve para que seja testado antes de fazer processar o servidor a toa
         res.status(400).send({ message: "Submit at least one field for update" })
-    } 
+    }
 
-    const {id, user} = req;
+    const { id, user } = req;
 
     /* substituido 
     if(!mongoose.Types.ObjectId.isValid(id)){   // se o id não for valido
@@ -72,11 +82,11 @@ const update = async (req, res) => {
 
     await userService.updateService( //atualizar
         id,
-        name, 
-        username, 
-        email, 
-        password, 
-        avatar, 
+        name,
+        username,
+        email,
+        password,
+        avatar,
         background
     );
 
