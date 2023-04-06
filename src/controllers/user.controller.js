@@ -2,7 +2,7 @@
 *arquivo separado
  *recebemos os dados do usuario atraves de um formulário. A requisição pode receber algumas coisas não só acesso a rota, como por exemplo um body(JSon)*/
 
-const userService = require("../services/user.sevice");
+import userService from "../services/user.sevice.js";
 
 //usado try/catch como boa pratica para dar uma resposta para o cliente caso nao execute com sucesso
 
@@ -93,4 +93,7 @@ const update = async (req, res) => {
     res.send({ message: "User successfully updated!" });
 };
 
-module.exports = { create, findAll, findById, update };   //função module exports em sua maioria exporta um objeto
+//module.exports = { create, findAll, findById, update }; (common JS)  
+//função module exports em sua maioria exporta um objeto
+
+export default { create, findAll, findById, update };

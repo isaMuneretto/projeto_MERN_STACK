@@ -1,10 +1,14 @@
-const express = require('express');
-const app = express();
-const connectDatabase = require("./src/database/db") //importar
- 
-//temos que importar a rota para cá, então primeiro exporta lá no user.route
-const userRoute = require("./src/routes/user.route") //aqui importa
+/*forma antiga de importar no JS (common JS)
+const express = require('express'); 
+const connectDatabase = require("./src/database/db")*/
+
+//ES module
+import express from 'express'; 
+import connectDatabase from "./src/database/db.js";
+import userRoute from "./src/routes/user.route.js"; //temos que importar a rota para cá, então primeiro exporta lá no user.route
+
 const port = 3000;
+const app = express();
 
 connectDatabase()
 app.use(express.json()); //envia arquivos json

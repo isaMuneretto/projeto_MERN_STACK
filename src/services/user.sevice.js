@@ -3,7 +3,7 @@
 o service vai se conectar com o banco de dados e mostra isso para nós.
 - a model é o que eu quero cadastrar no meu banco (User.js)*/
 
-const User = require("../models/User");
+import User from "../models/User.js";
 
 const createService = (body) => User.create(body);  //é assícrono, pois vai lá no banco de dados, vai conectar, criar e retornar lá no controller   
 /*recebe os dados do body e passa para a arrow function o que recebeu como parâmetro que é o body novamente.
@@ -27,7 +27,7 @@ const updateService = (
         { name, username, email, password, avatar, background }//segundo parametro é um obj com todos os campos que eu quero atualizar
     );
 
-module.exports = {  //exporta o create
+export default {  //exporta o create
     createService,
     findAllService,
     findByIdService,

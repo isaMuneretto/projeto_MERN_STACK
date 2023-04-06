@@ -1,15 +1,22 @@
-const route = require('express').Router(); //cria rotas fora do arquivo principal
-const userController = require('../controllers/user.controller');
+/*const router = require('express').Router(); (common JS)
+const userController = require('../controllers/user.controller'); */
 
-const { validId, validUser } = require("../middlewares/global.middlewares");
+import express from 'express';
+ //cria rotas fora do arquivo principal
+import userController from "../controllers/user.controller.js";
+import { validId, validUser } from "../middlewares/global.middlewares.js";
 
-route.post("/", userController.create);  //a função de callback vai ficar desmembrada dentro de controllers. //requisição post com user é pq está criando um novo usuario
-route.get("/", userController.findAll);
-route.get("/:id", validId, validUser, userController.findById);                          //buscar o usuario por id. nesse caso :id é a representaçao por id
-route.patch("/:id", validId, validUser, userController.update);
+const router = express.Router();
 
-module.exports = route;  //exportanto a rota para ser usada no módulo index
+router.post("/", userController.create);  //a função de callback vai ficar desmembrada dentro de controllers. //requisição post com user é pq está criando um novo usuario
+router.get("/", userController.findAll);
+router.get("/:id", validId, validUser, userController.findById);                          //buscar o usuario por id. nesse caso :id é a representaçao por id
+router.patch("/:id", validId, validUser, userController.update);
 
+//exportanto a rota para ser usada no módulo index
+//module.exports = route; (common JS)
+
+export default router;
 
 /*ANOTAÇÕES
  o navegador por padrão faz get, então para testar o método post, para mandar alguma coisa no body

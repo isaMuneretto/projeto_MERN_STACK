@@ -1,9 +1,9 @@
 //middlewares são funcoes de interceptacao da chamada entre a rota e a funcao de callback (ir em user.route)
 
-const mongoose = require("mongoose");  //testa o id
-const userService = require("../services/user.sevice") //testa se o usuario existe, buscando ele no servidor (Service)
+import mongoose from "mongoose";  //testa o id
+import userService from "../services/user.sevice.js"; //testa se o usuario existe, buscando ele no servidor (Service). 
 
-const validId = (req, res, next) => {  //1ª funcao
+export const validId = (req, res, next) => {  //1ª funcao. aqui ja está exportando tbm 
    try {const id = req.params.id
 
     if (!mongoose.Types.ObjectId.isValid(id)) {   // se o id não for valido
@@ -16,7 +16,7 @@ const validId = (req, res, next) => {  //1ª funcao
 }
 };
 
-const validUser = async (req, res, next) => {
+export const validUser = async (req, res, next) => {
     
     try {
         const id = req.params.id;
@@ -35,4 +35,4 @@ const validUser = async (req, res, next) => {
         res.status(500).send({ message: err.message });
     }
 };
-module.exports = { validId, validUser };
+
