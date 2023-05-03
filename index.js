@@ -1,21 +1,26 @@
-/*forma antiga de importar no JS (common JS)
+/* forma antiga de importar no JS (common JS)
 const express = require('express'); 
-const connectDatabase = require("./src/database/db")*/
+const connectDatabase = require("./src/database/db") */
+
 
 //ES module
 import express from 'express'; 
 import connectDatabase from "./src/database/db.js";
-import userRoute from "./src/routes/user.route.js"; //temos que importar a rota para cá, então primeiro exporta lá no user.route
 import dotenv from "dotenv";
+
+import userRoute from "./src/routes/user.route.js"; //temos que importar a rota para cá, então primeiro exporta lá no user.route
+import authRoute from "./src/routes/auth.route.js";
+
 dotenv.config();
 
 const port = process.env.PORT || 3000; //todo servidor tem, é padrao
 const app = express();
 
-connectDatabase()
+connectDatabase();
 app.use(express.json()); //envia arquivos json
 //como utilizar de fato o user.route
-app.use("/user", userRoute)
+app.use("/user", userRoute);
+app.use("/auth", authRoute);
 
 //ROTA é a porta de entrada da nossa API, do nosso backend
 //Method HTTP - É a forma como a internet se comunica - CRUD (CREATE, READ, UPDATE, DELETE)
