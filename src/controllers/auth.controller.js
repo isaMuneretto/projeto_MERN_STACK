@@ -7,9 +7,17 @@ const login = async (req, res) => {
     try {
         const user = await loginService(email); //busca o email no banco de dados
 
-        /*const passwordIsValid = bcrypt.compare(password, user.password); */
+        if(!user){
+            return res.status(404).send({message: "User or password not found"}) 
+        }
 
-        res.send(user);
+        const passwordIsValid = bcrypt.compareSync(password, user.password); 
+
+        if(!passwordIsValid){
+            return res.status(404).send({message: "User or password not found"})
+        }
+
+        res.send("Login ok");
     } catch (err) {
         res.status(500).send(err.message);
     }
