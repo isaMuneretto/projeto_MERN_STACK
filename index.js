@@ -10,6 +10,7 @@ import dotenv from "dotenv";
 
 import userRoute from "./src/routes/user.route.js"; //temos que importar a rota para cá, então primeiro exporta lá no user.route
 import authRoute from "./src/routes/auth.route.js";
+import newsRoute from "./src/routes/news.route.js";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(express.json()); //envia arquivos json
 //como utilizar de fato o user.route
 app.use("/user", userRoute);
 app.use("/auth", authRoute);
+app.use("/news", newsRoute);
 
 //ROTA é a porta de entrada da nossa API, do nosso backend
 //Method HTTP - É a forma como a internet se comunica - CRUD (CREATE, READ, UPDATE, DELETE)
