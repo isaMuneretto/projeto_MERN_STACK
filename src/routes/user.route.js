@@ -20,4 +20,7 @@ export default router;
 
 /*ANOTAÇÕES
  o navegador por padrão faz get, então para testar o método post, para mandar alguma coisa no body
-pode ser usado três ferramentas principais: POSTMAN, TUNDERCLAIT E INSOMNIA.*/
+pode ser usado três ferramentas principais: POSTMAN, TUNDERCLAIT E INSOMNIA.
+Sobre os DEFAULTS: quando é somente export, consegue importar desconstruido e quando é export default
+eu não consigo importar desconstruido
+*/

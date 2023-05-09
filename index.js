@@ -36,4 +36,5 @@ app.use("/news", newsRoute);
 
 //Function (Callback "função executado por trás de outra função") "(req, res)" - Responsavel por executar algum comando
 
+//header é um metadado que é o dado dos dados. É onde configura os dados
 app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));   //função da porta e função de callback com arrow function inline (não precisa das chaves)
