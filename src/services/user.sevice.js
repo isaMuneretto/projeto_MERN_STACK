@@ -9,9 +9,9 @@ const createService = (body) => User.create(body);  //é assícrono, pois vai l�
 /*recebe os dados do body e passa para a arrow function o que recebeu como parâmetro que é o body novamente.
  User é o Schema que foi importado em cima. Create é um método do mongoose que cria um novo item dentro desse Schema.*/
 
-const findAllService = () => User.find();
+const findAllUserService = () => User.find();
 
-const findByIdService = (id) => User.findById(id);
+const findByIdUserService = (idUser) => User.findById(idUser);
 
 const updateService = (
     id,
@@ -29,7 +29,7 @@ const updateService = (
 
 export default {  //exporta o create
     createService,
-    findAllService,
-    findByIdService,
+    findAllUserService,
+    findByIdUserService,
     updateService,
 };  
