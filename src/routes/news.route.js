@@ -1,13 +1,17 @@
 import { Router } from 'express';
 const router = Router();
 
-import {create, findAll, topNews, findById} from "../controllers/news.controller.js";
+import {create, findAll, topNews, findById, searchByTitle, byUser} from "../controllers/news.controller.js";
 import { authMiddleware } from '../middlewares/auth.middlewares.js';
 
 router.post("/", authMiddleware, create); //cria uma nova noticia
 router.get("/", findAll); // para pegar todos
 router.get("/top", topNews);
-router.get("/:id", findById); //busca pelo id
+router.get("/search", searchByTitle); //busca pelo titulo
+router.get("/byUser", authMiddleware, byUser); //consegue pegar o id do usuario pelo token de autenticação
+
+router.get("/:id", authMiddleware, findById); //busca pelo id, somente o id tem autenticação
+
 
 export default router;
 
