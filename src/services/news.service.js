@@ -10,8 +10,11 @@ const findAllService = (offset, limit) => News.find().sort({_id: -1}).skip(offse
 
 const countNews = () => News.countDocuments();
 
+const topNewsService = () => News.findOne().sort({_id: -1}).populate("user");//busca a ultima noticia. Find One não traz nada
+
 export {
     createService,
     findAllService,
-    countNews
+    countNews,
+    topNewsService
 };

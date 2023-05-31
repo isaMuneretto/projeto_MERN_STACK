@@ -1,8 +1,8 @@
-import { createService, findAllService, countNews } from "../services/news.service.js";
+import { createService, findAllService, countNews, topNewsService, } from "../services/news.service.js";
 
 const create = async (req, res) => {
     try {
-        const {title, text, banner} = req.body;
+        const { title, text, banner } = req.body;
 
         if (!title || !banner || !text) {
             res.status(400).send({
@@ -24,17 +24,18 @@ const create = async (req, res) => {
 };
 
 const findAll = async (req, res) => {
-    //para transformar o valor de limit e offset não pode ser uma constante
-    let {limit, offset} = req.query; 
+    try {
+        //para transformar o valor de limit e offset não pode ser uma constante
+    let { limit, offset } = req.query;
     //de string para number
     limit = Number(limit);
     offset = Number(offset);
 
-    if(!limit) {
+    if (!limit) {
         limit = 5;
     }
 
-    if(!offset) {
+    if (!offset) {
         offset = 0; //é de onde eu começo, nesse caso de 0 e depois pula de 5 em 5
     }
 
@@ -42,15 +43,15 @@ const findAll = async (req, res) => {
     const total = await countNews();
     const currentUrl = req.baseUrl;
 
-    const next = offset + limit; ;
+    const next = offset + limit;;
     const nextUrl = next < total ? `${currentUrl}?limit=${limit}&offset=${next}` : null; //cria uma nova url
 
     //typeof em js é para ver qual tipo de variável e vai ser uma string e tudo que envia no query params é uma string
     //console.log(typeof limit, typeof offset); 
     const previous = offset - limit < 0 ? null : offset - limit;
-    const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null; 
+    const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null;
 
-    if (news.length === 0) { 
+    if (news.length === 0) {
         return res.status(400).send({ message: "There are no registered news" });
     }
     res.send({
@@ -71,7 +72,36 @@ const findAll = async (req, res) => {
             userName: item.user.username,
             avatar: item.user.avatar,
         })),
-    })   //manda um obj
+    });   //manda um obj
+    }catch (err) {
+        res.status(500).send({ message: err.message });
+    };
 };
 
-export { create, findAll };
+const topNews = async (req, res) => {
+    try{
+        const news = await topNewsService();
+
+    if (!news) {
+        return res.status(400).send({ message: "There is registered post" });
+    }
+
+    res.send({
+        news: {
+            id: item._id,
+            title: item.title,
+            text: item.text,
+            banner: item.banner,
+            likes: item.likes,
+            comments: item.comments,
+            name: item.user.name,
+            userName: item.user.username,
+            avatar: item.user.avatar,
+        },
+    });
+    }catch (err) {
+        res.status(500).send({ message: err.message });
+    };   
+};
+
+export { create, findAll, topNews };
