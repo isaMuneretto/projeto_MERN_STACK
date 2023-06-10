@@ -18,6 +18,9 @@ export const searchByTitleService = (title) => News.find({
     title: { $regex: `${title || ""}`, $options: "i" },   //busca pelo titulo ou vazio e as options é para dizer se vai ser casesensitive ou não
 }).sort({ _id: -1 }).populate("user");
 
-export const byUSerService = (id) => News.find({user: id}).sort({ _id: -1 }).populate("user"); //o id é buscado pelo user
+export const byUserService = (id) => News.find({user: id}).sort({ _id: -1 }).populate("user"); //o id é buscado pelo user
+
+export const updateService = (id, title, text, banner) => News.findOneAndUpdate({ _id: id }, { title, text, banner }, { rawResult: true });  
+//findOndeAndUpdate é o comando de update para o mongoose. id=qual item e segundo parametro é o que quer atualizar
 
 //export { createService, findAllService, countNews, topNewsService }; exportado já nas funções

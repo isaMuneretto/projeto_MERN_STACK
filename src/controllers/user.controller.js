@@ -56,7 +56,8 @@ const findAll = async (req, res) => {  //é assincrono porque vai consultar no b
 const findById = async (req, res) => {
     /*if(!mongoose.Types.ObjectId.isValid(id)){    se o id não for valido
         return res.status(400).send({message: "Invalid ID"});
-    } 
+    }/* 
+    
     const user = await userService.findByIdService(id)  //busca efetivamente o usuario. Acessa o bd pelo service. substituido pela funcao de baixo */
 
     const user = req.user;

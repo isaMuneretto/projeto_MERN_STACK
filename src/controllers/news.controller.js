@@ -1,4 +1,13 @@
-import { createService, findAllService, countNews, topNewsService, findByIdService, searchByTitleService, byUSerService } from "../services/news.service.js";
+import { 
+    createService, 
+    findAllService, 
+    countNews, 
+    topNewsService, 
+    findByIdService, 
+    searchByTitleService, 
+    byUserService,
+    updateService
+} from "../services/news.service.js";
 
 export const create = async (req, res) => {
     try {
@@ -158,7 +167,7 @@ export const searchByTitle = async (req, res) => {
 export const byUser = async (req, res) => {
     try {
         const id = req.userId; // req.userId foi criado la na pasta authMiddleware
-        const news = await byUSerService(id);
+        const news = await byUserService(id);
 
         return res.send({
             results: news.map((item) => ({  //map vai varrer o obj
@@ -173,6 +182,29 @@ export const byUser = async (req, res) => {
                 avatar: item.user.avatar,
             })),
         });
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+};
+
+export const update = async (req, res) => {
+    try {
+        const { title, text, banner } = req.body; //recebe pelo corpo 
+        const { id } = req.params; //recebe qual o item que quer atualizar
+
+        if (!title && !text && !banner) {
+            res.status(400).send({message: "Submit at least one field to update the post"});
+        }
+
+        const news = await findByIdService (id);
+
+        if (news.user._id !== req.userId) {
+            return res.status(400).send( { message: "You didn't update this post" });
+        }
+
+        await updateService(id, title, text, banner);
+
+        return res.send({ message: "Post sucessfully updated!" })
     } catch (err) {
         res.status(500).send({ message: err.message });
     }

@@ -8,9 +8,9 @@ import { validId, validUser } from "../middlewares/global.middlewares.js";
 
 const router = Router();
 
-router.post("/", userController.create);  //a função de callback vai ficar desmembrada dentro de controllers. //requisição post com user é pq está criando um novo usuario
+router.post("/", userController.create);  //a função de callback vai ficar desmembrada dentro de controllers. //requisição post criando um novo usuario
 router.get("/", userController.findAll);
-router.get("/:id", validId, validUser, userController.findById);                          //buscar o usuario por id. nesse caso :id é a representaçao por id
+router.get("/:id", validId, validUser, userController.findById); //buscar o usuario por id. nesse caso :id é a representaçao por id
 router.patch("/:id", validId, validUser, userController.update);
 
 //exportanto a rota para ser usada no módulo index
