@@ -1,12 +1,12 @@
 /*const router = require('express').Router(); (common JS)
 const userController = require('../controllers/user.controller'); */
 
-import { Router } from 'express';
+import express from 'express';
  //cria rotas fora do arquivo principal
 import userController from "../controllers/user.controller.js";
 import { validId, validUser } from "../middlewares/global.middlewares.js";
 
-const router = Router();
+const router = express.Router();
 
 router.post("/", userController.create);  //a função de callback vai ficar desmembrada dentro de controllers. //requisição post criando um novo usuario
 router.get("/", userController.findAll);
