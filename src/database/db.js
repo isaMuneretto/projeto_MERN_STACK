@@ -6,8 +6,8 @@ const connectDatabase = () => { //conexão com o banco de dados
     
     mongoose
         .connect( process.env.MONGODB_URI ,  //acessar a variavel global no arquivo .env
-            { useNewUrlParser: true, useUnifiedTopology: true }
-        )
+            { useNewUrlParser: true, useUnifiedTopology: true } //para não ter problema de rede (mongo online) e tipologia
+        )//assincrono, precisa esperar
         .then(() => console.log("MongoDB Atlas Connected"))
         .catch((error) => console.log(error))
 };

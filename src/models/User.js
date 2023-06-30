@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcryptjs from 'bcryptjs';
 
-//limita como os documentos serão criados
+//schema limita como os documentos serão criados
 const UserSchema = new mongoose.Schema({  //Schema é um metodo do mongoose. Aqui foi criado uma instância do Schema 
     //cria um objeto
     name: {
@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({  //Schema é um metodo do mongoose. Aqu
     email: {
         type: String,
         required: true,
-        unique: true,
+        unique: true, //é um email único
         lowercase: true,
     },
     password: {

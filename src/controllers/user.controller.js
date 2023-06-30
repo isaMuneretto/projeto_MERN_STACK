@@ -15,7 +15,7 @@ const create = async (req, res) => {     //controller controla requisição e re
         }
 
         //antes de responder (res.status) para o meu usuario eu posso cadastrar e enviar
-        const user = await userService.createService(req.body); //await é para esperar executar userService.create(req.body) para continuar
+        const user = await userService.createService(req.body); //essa const vai lá para o user.service no createService
 
         //verifica o user de cima
         if (!user) {
@@ -23,10 +23,11 @@ const create = async (req, res) => {     //controller controla requisição e re
         }
 
         //recebe arquivos json. Resposta para o usuário
+       //desestruturação podendo não mostrar algum campo como por exemplo, o password 
         res.status(201).send({
             message: "User created successfully",
             user: {
-                id: user._id,
+                id: user._id, //o underscore vem lá do MongoDB que o id tem underscore
                 name,
                 username,
                 email,
@@ -41,7 +42,7 @@ const create = async (req, res) => {     //controller controla requisição e re
 
 const findAll = async (req, res) => {  //é assincrono porque vai consultar no banco de dados que é um código que vai executar fora do nosso código
     try {
-        const users = await userService.findAllService();  //não passa nenhum parâmetro porque já vai retornar os dados que vai ser buscado. Esse findAll não é o mesmo de cima que é do controller                                       //para buscar os usuarios precisa armazenar em uma variavel
+        const users = await userService.findAllUserService();  //Pega do banco. não passa nenhum parâmetro porque já vai retornar os dados que vai ser buscado. Esse findAll não é o mesmo de cima que é do controller                                       //para buscar os usuarios precisa armazenar em uma variavel
 
         if (users.length === 0) {  //verifica se está recebendo todos os usuarios
             return res.status(400).send({ message: "There are no registered users" })
@@ -56,32 +57,33 @@ const findAll = async (req, res) => {  //é assincrono porque vai consultar no b
 const findById = async (req, res) => {
     /*if(!mongoose.Types.ObjectId.isValid(id)){    se o id não for valido
         return res.status(400).send({message: "Invalid ID"});
-    }/* 
-    
-    const user = await userService.findByIdService(id)  //busca efetivamente o usuario. Acessa o bd pelo service. substituido pela funcao de baixo */
-
-    const user = req.user;
+    }*/
+   
+    const user = req.user; //aqui vem lá do global.middleware no validUser que já verificou o usuario não precisa fazer a chamad
     res.send(user);
 };
 
 const update = async (req, res) => {
     const { name, username, email, password, avatar, background } = req.body;  //recebe o corpo da requisição e desmembra o objeto e faz com que cada item se transforme em uma variavel para validar elas individualmente
-
+    
+    //no if é && porque se um for verdadeiro, vai ter que submeter ao menos um
     if (!name && !username && !email && !password && !avatar && !background) {  //o if serve para que seja testado antes de fazer processar o servidor a toa
         res.status(400).send({ message: "Submit at least one field for update" })
     }
 
-    const { id, user } = req;
+    //o body da const de cima não recebe o id então tem que criar essa const
+    const { id, user } = req; 
 
-    /* substituido 
+    /* não precisa desse código repetitivo porque foi criado um middleware
     if(!mongoose.Types.ObjectId.isValid(id)){   // se o id não for valido
         return res.status(400).send({message: "Invalid ID"});}
-    const user = await userService.findByIdService(id); 
+        
+        const user = await userService.findByIdService(id); 
      if (!user) {  //verifica se tem algum usuario
         return res.status(400).send({message: "User not found"});
     }*/
 
-    await userService.updateService( //atualizar
+    await userService.updateService( //atualizar. é enviado por parametro então não tem estrutura de obj
         id,
         name,
         username,

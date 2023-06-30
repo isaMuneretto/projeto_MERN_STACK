@@ -1,7 +1,8 @@
 /*ANOTAÇÕES
+- Service acessa o nosso banco de dados através da nossa model USer
 - a rota se comunica com o controller e o controller faz alguma logica e manda as informações para o server.
 o service vai se conectar com o banco de dados e mostra isso para nós.
-- a model é o que eu quero cadastrar no meu banco (User.js)*/
+- importa da model que é onde definiu os campos (models->User.js)*/
 
 import User from "../models/User.js";
 
@@ -11,9 +12,9 @@ const createService = (body) => User.create(body);  //é assícrono, pois vai l�
 
 const findAllUserService = () => User.find();
 
-const findByIdUserService = (idUser) => User.findById(idUser);
+const findByIdService = (idUser) => User.findById(idUser);//findById é um método proprio do mongoose
 
-const updateService = (
+const updateService = (//os campos abaixo são do controller
     id,
     name,
     username,
@@ -22,14 +23,14 @@ const updateService = (
     avatar,
     background
 ) => //função inline 
-    User.findOneAndUpdate(
-        { _id: id }, //o primeiro obj é a representação do id no mongoose e recebe o id do objeto acima
+    User.findOneAndUpdate( //"procure um id e atualize"
+        { _id: id }, //o primeiro  é a representação do id no mongoose e recebe o id do objeto acima
         { name, username, email, password, avatar, background }//segundo parametro é um obj com todos os campos que eu quero atualizar
     );
 
 export default {  //exporta o create
     createService,
     findAllUserService,
-    findByIdUserService,
+    findByIdService,
     updateService,
 };  
